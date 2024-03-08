@@ -1,11 +1,8 @@
 package com.gabodev.bankclientbackend.service;
 
-import com.gabodev.bankclientbackend.enums.OperationType;
-import com.gabodev.bankclientbackend.model.Account;
-import com.gabodev.bankclientbackend.model.Client;
-import com.gabodev.bankclientbackend.model.Operation;
+import com.gabodev.bankclientbackend.entity.Account;
+import com.gabodev.bankclientbackend.entity.Client;
 import com.gabodev.bankclientbackend.repository.*;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,26 +13,24 @@ public class AccountService implements IAccountService {
 
     private final AccountRepository accountRepository;
     private final ClientRepository clientRepository;
-    private final IOperationRepository operationRepository;
+    private final IOperationService operationService;
 
-    public AccountService(AccountRepository accountRepository, ClientRepository clientRepository, IOperationRepository operationRepository) {
+    public AccountService(AccountRepository accountRepository, ClientRepository clientRepository, IOperationService operationService) {
         this.accountRepository = accountRepository;
         this.clientRepository = clientRepository;
-        this.operationRepository = operationRepository;
+        this.operationService = operationService;
     }
 
-    public String init() {
+    public void init() {
         Client client = new Client("Gabriel", "example@example2.com");
+        Client client1 = new Client("Gaben", "example@valvesoftware.com");
         clientRepository.save(client);
+        clientRepository.save(client1);
         this.registerNewClientAccount(clientRepository.findByClientEmail("example@example2.com").getClientId());
-        Operation operation = new Operation("1", 100.0, "1", "2","10-10-1999", OperationType.TRANSFER);
-        Operation operation1 = new Operation("2", 2000, null, "3","10-11-2000", OperationType.WITHDRAWAL);
-        operationRepository.save(operation);
-        operationRepository.save(operation1);
-        return "Init OK";
+        this.registerNewClientAccount(clientRepository.findByClientEmail("example@valvesoftware.com").getClientId());
+        operationService.init();
     }
     @Override
-    @Transactional
     public void registerNewClientAccount(Integer clientId) {
         Account newAccount = new Account(String.valueOf(UUID.randomUUID()), 0, clientId);
         accountRepository.save(newAccount);
@@ -43,19 +38,19 @@ public class AccountService implements IAccountService {
 
     @Override
     public List<Account> getAccountsByClientId(Integer clientId) {
-        System.out.println("/api/accounts/{clientId} triggered: " + accountRepository.findByClientOwner(clientId));
+        System.out.println("GET /api/accounts/{clientId} triggered");
         return accountRepository.findByClientOwner(clientId);
     }
 
     @Override
     public Account getAccountById(String accountId) {
-        System.out.println("/api/accounts/{accountId} triggered: " + accountRepository.findByIBAN(accountId));
+        System.out.println("GET /api/accounts/{accountId}");
         return accountRepository.findByIBAN(accountId);
     }
     @Override
     public List<Account> getAccountList() {
         List<Account> fetchedAccounts = accountRepository.findAll();
-        System.out.println("/api/accounts/all triggered: " + fetchedAccounts.get(0).getIBAN());
+        System.out.println("GET /api/accounts/all triggered");
         return fetchedAccounts;
     }
 }

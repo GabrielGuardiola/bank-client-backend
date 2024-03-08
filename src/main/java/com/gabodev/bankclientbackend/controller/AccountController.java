@@ -1,6 +1,7 @@
 package com.gabodev.bankclientbackend.controller;
 
-import com.gabodev.bankclientbackend.model.Account;
+import com.gabodev.bankclientbackend.dto.RegisterNewClientAccountRequest;
+import com.gabodev.bankclientbackend.entity.Account;
 import com.gabodev.bankclientbackend.service.IAccountService;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,4 +39,9 @@ public class AccountController {
         return response;
     }
 
+    @PostMapping("/accounts/create")
+    public Map<String, Boolean> registerNewClientAccount(@RequestBody RegisterNewClientAccountRequest request) {
+        accountService.registerNewClientAccount(request.getClientId());
+        return Map.of("success", true);
+    }
 }

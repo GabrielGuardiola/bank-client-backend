@@ -1,10 +1,7 @@
-package com.gabodev.bankclientbackend.model;
+package com.gabodev.bankclientbackend.entity;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.List;
 @Getter
 @Entity(name = "account")
 @Table(name = "ACCOUNTS")

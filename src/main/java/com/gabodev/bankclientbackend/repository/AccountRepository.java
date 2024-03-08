@@ -1,6 +1,6 @@
 package com.gabodev.bankclientbackend.repository;
 
-import com.gabodev.bankclientbackend.model.Account;
+import com.gabodev.bankclientbackend.entity.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
