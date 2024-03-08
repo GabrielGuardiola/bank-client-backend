@@ -1,20 +1,25 @@
 package com.gabodev.bankclientbackend.model;
 
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 
-@Data
+@Getter
+@Entity(name = "client")
+@Table(name = "CLIENTS")
 public class Client {
-    @Getter
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer clientId;
+    @Column(name = "CLIENT_NAME", nullable = false)
     private String clientName;
+    @Column(name = "CLIENT_EMAIL", nullable = false)
     private String clientEmail;
 
     public Client() {
     }
 
-    public Client(Integer clientId, String clientName, String clientEmail) {
-        this.clientId = clientId;
+    public Client(String clientName, String clientEmail) {
         this.clientName = clientName;
         this.clientEmail = clientEmail;
     }
