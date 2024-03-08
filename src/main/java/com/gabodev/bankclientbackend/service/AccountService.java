@@ -13,12 +13,10 @@ public class AccountService implements IAccountService {
 
     private final AccountRepository accountRepository;
     private final ClientRepository clientRepository;
-    private final IOperationService operationService;
 
-    public AccountService(AccountRepository accountRepository, ClientRepository clientRepository, IOperationService operationService) {
+    public AccountService(AccountRepository accountRepository, ClientRepository clientRepository) {
         this.accountRepository = accountRepository;
         this.clientRepository = clientRepository;
-        this.operationService = operationService;
     }
 
     public void init() {
@@ -28,7 +26,6 @@ public class AccountService implements IAccountService {
         clientRepository.save(client1);
         this.registerNewClientAccount(clientRepository.findByClientEmail("example@example2.com").getClientId());
         this.registerNewClientAccount(clientRepository.findByClientEmail("example@valvesoftware.com").getClientId());
-        operationService.init();
     }
     @Override
     public void registerNewClientAccount(Integer clientId) {

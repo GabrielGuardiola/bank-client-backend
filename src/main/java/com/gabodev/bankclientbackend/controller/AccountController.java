@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/accounts")
 public class AccountController {
 
     private final IAccountService accountService;
@@ -19,11 +19,11 @@ public class AccountController {
         this.accountService = accountService;
     }
     @GetMapping("/init")
-    public String init() {
+    public Map<String, Boolean> init() {
         accountService.init();
-        return "Init OK";
+        return Map.of("success", true);
     }
-    @GetMapping("/accounts/{clientId}")
+    @GetMapping("/{clientId}")
     public Map<String, List<Account>> getAccountsByClientId(@PathVariable Integer clientId) {
         List<Account> accounts = accountService.getAccountsByClientId(clientId);
         Map<String, List<Account>> response = new HashMap<>();
@@ -31,7 +31,7 @@ public class AccountController {
         return response;
     }
 
-    @GetMapping("/accounts/all")
+    @GetMapping("/all")
     public Map<String, List<Account>> getAccountList() {
         List<Account> accounts = accountService.getAccountList();
         Map<String, List<Account>> response = new HashMap<>();
@@ -39,7 +39,7 @@ public class AccountController {
         return response;
     }
 
-    @PostMapping("/accounts/create")
+    @PostMapping("/create")
     public Map<String, Boolean> registerNewClientAccount(@RequestBody RegisterNewClientAccountRequest request) {
         accountService.registerNewClientAccount(request.getClientId());
         return Map.of("success", true);

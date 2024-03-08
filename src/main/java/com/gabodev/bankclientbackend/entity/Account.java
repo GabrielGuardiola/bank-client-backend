@@ -1,6 +1,7 @@
 package com.gabodev.bankclientbackend.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Entity(name = "account")
@@ -11,6 +12,7 @@ public class Account {
     private Long id;
     @Column(name = "IBAN", nullable = false)
     private String IBAN;
+    @Setter
     @Column(name = "BALANCE", nullable = false)
     private double balance;
     @Column(name = "CLIENT_OWNER", nullable = false)
@@ -24,4 +26,5 @@ public class Account {
         this.balance = balance;
         this.clientOwner = clientOwner;
     }
+
 }

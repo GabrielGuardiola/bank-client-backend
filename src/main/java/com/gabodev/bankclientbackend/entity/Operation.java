@@ -17,7 +17,7 @@ public class Operation {
     private double amount;
     @Column(name = "DESTINATION_ACCOUNT_ID")
     private String destinationAccountId;
-    @Column(name = "ORIGIN_ACCOUNT_ID", nullable = false)
+    @Column(name = "ORIGIN_ACCOUNT_ID")
     private String originAccountId;
     @Column(name = "DATE", nullable = false)
     private LocalDate date;
