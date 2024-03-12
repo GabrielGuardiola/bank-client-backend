@@ -6,6 +6,7 @@ import com.gabodev.bankclientbackend.entity.Operation;
 import com.gabodev.bankclientbackend.repository.AccountRepository;
 import com.gabodev.bankclientbackend.repository.ClientRepository;
 import com.gabodev.bankclientbackend.repository.OperationRepository;
+import com.gabodev.bankclientbackend.utils.LogUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -27,13 +28,14 @@ public class OperationService implements IOperationService {
     public void init() {
         depositAmountToClientAccount(accountRepository.findByClientOwner(1).get(0).getIBAN(), 1000.0, 1);
         withdrawAmountToClientAccount(accountRepository.findByClientOwner(1).get(0).getIBAN(), -100.0, 1);
+        LogUtils.logInfo("Operations initialized");
     }
 
     @Override
     public void depositAmountToClientAccount(String IBAN, double amount, Integer clientId) {
         Operation operation = new Operation(amount, null, IBAN, LocalDate.now(), OperationType.DEPOSIT);
         updateAccountBalance(IBAN, amount);
-        System.out.println("POST /api/operations/deposit triggered");
+        LogUtils.logInfo("POST /api/operations/deposit");
         operationRepository.save(operation);
     }
 
@@ -41,7 +43,7 @@ public class OperationService implements IOperationService {
     public void withdrawAmountToClientAccount(String IBAN, double amount, Integer clientId) {
         Operation operation = new Operation(amount, IBAN, null, LocalDate.now(), OperationType.WITHDRAWAL);
         updateAccountBalance(IBAN, amount);
-        System.out.println("POST /api/operations/withdraw triggered");
+        LogUtils.logInfo("POST /api/operations/withdraw");
         operationRepository.save(operation);
     }
 
@@ -50,7 +52,7 @@ public class OperationService implements IOperationService {
         Operation operation = new Operation(amount, IBANOrigin, IBANDestiny, LocalDate.now(), OperationType.TRANSFER);
         updateAccountBalance(IBANOrigin, -amount);
         updateAccountBalance(IBANDestiny, amount);
-        System.out.println("POST /api/operations/transfer triggered");
+        LogUtils.logInfo("POST /api/operations/transfer");
         operationRepository.save(operation);
     }
 
@@ -61,12 +63,12 @@ public class OperationService implements IOperationService {
         Account account = accountRepository.findByIBAN(IBAN);
         account.setBalance(account.getBalance() + amount);
         accountRepository.save(account);
-        System.out.println("Account balance of " + IBAN + " updated: " + account.getBalance() + amount + "€.");
+        LogUtils.logInfo("Account balance updated: " + IBAN + " " + amount);
     }
     @Override
     public List<Operation> getOperationsByAccountId(String IBAN) {
         List<Operation> operationsList = operationRepository.findByOriginAccountIdOrDestinationAccountId(IBAN, IBAN);
-        System.out.println("GET /api/operations/{IBAN} triggered");
+        LogUtils.logInfo("GET /api/operations/{IBAN}");
         return operationsList;
     }
 }

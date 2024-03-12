@@ -33,23 +33,24 @@ public class AccountService implements IAccountService {
     public void registerNewClientAccount(Integer clientId) {
         Account newAccount = new Account(String.valueOf(UUID.randomUUID()), 0, clientId);
         accountRepository.save(newAccount);
+        LogUtils.logInfo("New account created for client with id: " + clientId);
     }
 
     @Override
     public List<Account> getAccountsByClientId(Integer clientId) {
-        System.out.println("GET /api/accounts/{clientId} triggered");
+        LogUtils.logInfo("GET /api/accounts/{clientId}");
         return accountRepository.findByClientOwner(clientId);
     }
 
     @Override
     public Account getAccountById(String accountId) {
-        System.out.println("GET /api/accounts/{accountId}");
+        LogUtils.logInfo("GET /api/accounts/{accountId}");
         return accountRepository.findByIBAN(accountId);
     }
     @Override
     public List<Account> getAccountList() {
         List<Account> fetchedAccounts = accountRepository.findAll();
-        System.out.println("GET /api/accounts/all triggered");
+        LogUtils.logInfo("GET /api/accounts");
         return fetchedAccounts;
     }
 }
