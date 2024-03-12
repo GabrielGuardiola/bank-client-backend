@@ -3,6 +3,7 @@ package com.gabodev.bankclientbackend.service;
 import com.gabodev.bankclientbackend.entity.Account;
 import com.gabodev.bankclientbackend.entity.Client;
 import com.gabodev.bankclientbackend.repository.*;
+import com.gabodev.bankclientbackend.utils.LogUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class AccountService implements IAccountService {
         clientRepository.save(client1);
         this.registerNewClientAccount(clientRepository.findByClientEmail("example@example2.com").getClientId());
         this.registerNewClientAccount(clientRepository.findByClientEmail("example@valvesoftware.com").getClientId());
+        LogUtils.logInfo("Accounts initialized");
     }
     @Override
     public void registerNewClientAccount(Integer clientId) {
